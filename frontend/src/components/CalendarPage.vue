@@ -50,7 +50,7 @@
 </script>
 
 <template>
-  <div class="p-5">
+  <div>
     <FullCalendar :options="options">
         <template v-slot:eventContent='arg'>
           <b>{{ arg.event.title }}</b>
