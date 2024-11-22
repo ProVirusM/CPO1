@@ -1,86 +1,35 @@
 <template>
-  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img
-        class="mx-auto h-10 w-auto"
-        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-        alt="Your Company"
-      />
-      <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-        Зарегестрируйтесь
-      </h2>
-    </div>
+  <div class="flex flex-wrap gap-[32px] items-center justify-center h-screen max-[830px]:h-0">
+    <img class="max-[830px]:ml-[80px]" src="/icons/logo_with_text.svg" />
+    <div class="w-[1px] h-[450px] bg-[#1A1A1A] max-[830px]:invisible"></div>
+    <div class="flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8">
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 class="text-end mr-[20px] font-golos font-bold text-[42px] cursor-default">
+          Регистрация
+        </h2>
+      </div>
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="#" method="POST">
-        <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900"
-            >Введите вашу почту</label
-          >
-          <div class="mt-2">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-              class="block w-full pl-[10px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6"
-            />
-          </div>
-        </div>
+      <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form class="space-y-6" action="#" method="POST">
+          <InputField label="почта" placeholder="Введите почту..." title="email" />
+          <InputField label="имя" placeholder="Введите имя..." title="name" />
+          <InputField label="пароль" placeholder="Введите пароль..." title="password" />
+          <AuthButton title="Зарегистрироваться" />
+        </form>
 
-        <div>
-          <label for="email" class="block text-sm/6 font-medium text-gray-900"
-            >Введите ваше имя</label
-          >
-          <div class="mt-2">
-            <input
-              id="name"
-              name="name"
-              type="name"
-              autocomplete="name"
-              required
-              class="block w-full pl-[10px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm/6 font-medium text-gray-900"
-              >Введите ваш пароль</label
-            >
-          </div>
-          <div class="mt-2">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              required
-              class="block w-full pl-[10px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6"
-            />
-          </div>
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Зарегистрироваться
-          </button>
-        </div>
-      </form>
-
-      <p class="mt-10 text-center text-sm/6 text-gray-500">
-        Есть аккаунт?
-        <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Войти</a>
-      </p>
+        <p
+          class="mt-10 text-center ml-[50px] sm:mr-[2px] cursor-pointer font-golos font-medium text-[21px] text-[#191919]"
+        >
+          Войти
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import InputField from '@/components/common/InputField.vue'
+import AuthButton from '@/components/common/AuthButton.vue'
+</script>
 
 <style lang="scss" scoped></style>
