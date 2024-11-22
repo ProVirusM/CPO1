@@ -1,0 +1,24 @@
+@import '../../src/index.css';
+@font-face {
+    font-family: 'GolosTest';
+    font-weight: 400; /* Regular */
+    src: url('../fonts/GolosText-Medium.ttf') format('truetype');}
+:root{
+    
+    /* --fc-small-font-size: 1.313rem; */
+    --fc-border-color: black;
+    --fc-daygrid-event-dot-width: 5px;
+    --fc-button-bg-color: #1A1A1A;
+}
+
+.fc .fc-button{
+    font-family: 'GolosTest';
+    border-radius: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.fc{
+    border-radius: 12px;
+}

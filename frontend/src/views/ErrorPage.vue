@@ -7,7 +7,7 @@
         Страница не найдена
       </p>
 
-      <router-link to="/">
+      <router-link to="/app">
         <button
           class="font-golos font-medium text-[21px] mt-[32px] fill-[#191919] w-[234px] h-[41px] stroke-[#1A1A1A] border-[1px] active:shadow-;g hover:shadow-md rounded-[12px]"
         >
