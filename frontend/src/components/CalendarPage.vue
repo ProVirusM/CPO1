@@ -7,6 +7,7 @@
   import multiMonthPlugin from '@fullcalendar/multimonth'
   import AuthButton from './common/AuthButton.vue'
   import Modal from './common/Modal.vue'
+  import SelectWithSearch from './common/SelectWithSearch.vue'
 
   import { ref } from 'vue'
 
