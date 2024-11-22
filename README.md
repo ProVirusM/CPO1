@@ -2,7 +2,7 @@
 
 ## Первый чек поинт
 1. Ссылка на дизайн макета в Figma https://www.figma.com/design/2P8ySbVgW19w3a4MyF0eV0/Хакатон-ФСП.-Ноябрь-2024?node-id=1-3&node-type=frame&t=oZleahV35ovRcKjT-0
-2. 
+2. Ссылка на гугл дискх архитектуры решения проекта https://drive.google.com/file/d/1AMcT4AANK3kmTWbqst4nt1GcIuB6xlKv/view
 
 
 ## Иструкция по запуску проекта для разработичков
