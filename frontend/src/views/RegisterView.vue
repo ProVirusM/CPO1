@@ -18,6 +18,7 @@
         </form>
 
         <p
+          @click="router.push('/auth')"
           class="mt-10 text-center ml-[50px] sm:mr-[2px] cursor-pointer font-golos font-medium text-[21px] text-[#191919]"
         >
           Войти
@@ -30,6 +31,9 @@
 <script setup>
 import InputField from '@/components/common/InputField.vue'
 import AuthButton from '@/components/common/AuthButton.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 </script>
 
 <style lang="scss" scoped></style>
