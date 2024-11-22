@@ -1,4 +1,5 @@
 import './index.css'
+import '../public/styles/fullcalendar.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
