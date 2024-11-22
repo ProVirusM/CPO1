@@ -3,13 +3,24 @@
         title: String
     })
     const model = defineModel()
+    const emits = defineEmits(['changed'])
+
+    function unCheck(){
+        model.value = false
+    }
+
+    function clicked(){
+        model.value = !model.value
+        emits('changed',model.value)
+    }
+    defineExpose(({unCheck}))
 </script>
 
 <template>
     <div>
-        <div class="checkbox-wrapper-13 items-center flex gap-2">
-            <input v-model="model" id="c1-13" type="checkbox">
-            <label @click="model = !model" for="">{{props.title}}</label>
+        <div class="checkbox-wrapper-13 items-center flex gap-2 z-50">
+            <input @change="$emit('changed',model)" v-model="model" id="c1-13" type="checkbox">
+            <label @click="clicked" for="">{{props.title}}</label>
         </div>
     </div>
 </template>
@@ -21,7 +32,7 @@
         --active-inner: #00DB62;
         --focus: 3px  #00C257;
         --border: #00C257;
-        --border-hover: ##00C257;
+        --border-hover: #00C257;
         --background: #fff;
         --disabled: #F6F8FF;
         --disabled-inner: #E1E6F9;
@@ -68,9 +79,7 @@
       .checkbox-wrapper-13 input[type=checkbox]:hover:not(:checked):not(:disabled) {
         --bc: var(--border-hover);
       }
-      .checkbox-wrapper-13 input[type=checkbox]:focus {
-        box-shadow: 0 0 0 var(--focus);
-      }
+      
       .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
         width: 21px;
       }
