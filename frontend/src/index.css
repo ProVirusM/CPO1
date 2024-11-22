@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 400; /* Regular */
+  src: url('/fonts/GolosTest-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 500; /* Medium */
+  src: url('/fonts/GolosTest-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 600; /* SemiBold */
+  src: url('/fonts/GolosTest-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 700; /* Bold */
+  src: url('/fonts/GolosTest-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 800; /* ExtraBold */
+  src: url('/fonts/GolosTest-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'GolosTest';
+  font-weight: 900; /* Black */
+  src: url('/fonts/GolosTest-Black.ttf') format('truetype');
+}
