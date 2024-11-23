@@ -1,6 +1,7 @@
 <script setup>
     import {onClickOutside} from '@vueuse/core'
     import {ref} from 'vue'
+    import {X} from 'lucide-vue-next'
 
     const props = defineProps({
         title: String,
@@ -23,7 +24,7 @@
                     {{ props.title }}
                 </div>
                 <div class="cursor-pointer" @click="opened = false">
-                    x
+                    <X />
                 </div>
             </div>
             <div class="modal-window__content">
@@ -77,26 +78,27 @@
         }
 
         &__top-panel{
-            height: 40px;
+            height: 72px;
             width: 100%;
             background-color: #EBEBEB;
             display: flex;
             flex-direction: row;
             align-items: center;
+            gap: 16px;
             border-top-left-radius: $borderRadius;
             border-top-right-radius: $borderRadius;
-            padding-left: 20px;
-            padding-right: 10px;
+            padding: 16px;
             justify-content: space-between;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+            
         }
 
         &__content{
-            padding: 20px;
+            
         }
 
         .title{
-            font-size: small;
+            font-weight: bold;
+            font-size: 24px;
         }
     }
 </style>

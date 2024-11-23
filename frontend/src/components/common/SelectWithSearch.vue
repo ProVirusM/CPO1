@@ -10,6 +10,7 @@
     const props = defineProps({
         text: String,
         items: Array,
+        
     })
 
     const items = ref(props.items)
