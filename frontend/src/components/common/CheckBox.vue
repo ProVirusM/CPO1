@@ -66,7 +66,7 @@
     <div>
         <div class="checkbox-wrapper-13 items-center flex gap-2 z-50">
             <input :disabled="props.disabled" @change="clickedBox" v-model="model" id="c1-13" type="checkbox">
-            <label  :disabled="props.disabled" @click="clickedLabel" for="">{{props.title}}</label>
+            <label class="font-bold"  :disabled="props.disabled" @click="clickedLabel" for="">{{props.title}}</label>
         </div>
     </div>
 </template>
