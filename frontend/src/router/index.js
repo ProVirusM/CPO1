@@ -34,12 +34,12 @@ const routes = [
       {
         path: '', // Пустой путь для главной страницы
         name: 'mainPage',
-        component: MainPage, // Главная страница
+        component: EventsPage, // Главная страница
       },
       {
         path: 'events',
         name: 'events',
-        component: EventsPage, // Мероприятия
+        component: MainPage, // Мероприятия
       },
       {
         path: 'profile',

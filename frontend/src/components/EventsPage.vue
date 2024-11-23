@@ -64,7 +64,7 @@
       <ModalSubscribe v-model="modalSubscribeVisible" />
     </div>
 
-    <CalendarPage></CalendarPage>
+    <CalendarPage v-model="events"></CalendarPage>
   </div>
 </template>
 
@@ -78,6 +78,7 @@ import { ref } from 'vue'
 import ParticipantsPicker from './common/ParticipantsPicker.vue'
 import { useFilterStore } from '@/stores/filterStore'
 import { useLoginStore } from '@/stores/loginStore'
+import { useEventStore } from '@/stores/eventStore'
 
 const model = ref([])
 const model2 = ref([])
@@ -88,6 +89,15 @@ const dateRange = ref([])
 const modalSubscribeVisible = ref(false)
 const amountStart = ref(0)
 const amountEnd = ref(10000)
+
+const eventStore = useEventStore()
+
+const events = ref([])
+async function loadEvents() {
+  events.value = await eventStore.getEvents()
+}
+
+loadEvents()
 
 const filterStore = useFilterStore()
 

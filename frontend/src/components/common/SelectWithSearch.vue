@@ -16,6 +16,26 @@ const props = defineProps({
 const items = ref(props.items)
 const selectedItems = defineModel()
 selectedItems.value = []
+watch(
+  () => props.items,
+  () => {
+    items.value = props.items
+  },
+)
+
+watch(
+  () => selectedItems.value.length,
+  () => {
+    console.log({ ...selectedItems.value })
+    if (selectedItems.value.length > 0) {
+      somethingSelected.value = true
+      stylesWithItems.value = ['text-[#F7F7F7]', 'bg-[#2E2E2E]']
+    } else {
+      somethingSelected.value = false
+      stylesWithItems.value = ref([])
+    }
+  },
+)
 
 watch(
   () => props.items,
