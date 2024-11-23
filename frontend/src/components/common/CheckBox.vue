@@ -1,26 +1,72 @@
 <script setup>
+    import { watch } from 'vue';
     const props = defineProps({
-        title: String
+        title: String,
+        disabled: Boolean,
+        checked: {
+            type: Boolean,
+            default: false
+        },
+        behavior:{
+            type: String,
+            validator: value => ['manualy','default'].includes(value),
+            default: 'default'
+        },
     })
     const model = defineModel()
     const emits = defineEmits(['changed'])
+
+    watch(()=>props.checked, ()=>{
+        updateChecked()
+    })
+
+    function updateChecked(){
+        if(props.checked)
+            model.value = true
+        else
+            model.value = false
+    }
+    updateChecked()
 
     function unCheck(){
         model.value = false
     }
 
-    function clicked(){
+    function check(){
+        model.value = true
+    }
+
+    function clickedLabel(){
+        if(props.behavior == 'manual'){
+            manualCheck()
+            return
+        }
         model.value = !model.value
         emits('changed',model.value)
+        
     }
-    defineExpose(({unCheck}))
+
+    function clickedBox(){
+        if(props.behavior == 'manual'){
+            manualCheck()
+            return
+        }
+        emits('changed',model)
+    }
+
+    function manualCheck(){
+        
+        emits('changed',model)
+        updateChecked()     
+    }
+    defineExpose(({unCheck,check}))
 </script>
 
 <template>
     <div>
         <div class="checkbox-wrapper-13 items-center flex gap-2 z-50">
-            <input @change="$emit('changed',model)" v-model="model" id="c1-13" type="checkbox">
-            <label @click="clicked" for="">{{props.title}}</label>
+            <input :disabled="props.disabled" @change="clickedBox" v-model="model" id="c1-13" type="checkbox">
+            <label  :disabled="props.disabled" @click="clickedLabel" for="">{{props.title}}</label>
         </div>
     </div>
 </template>

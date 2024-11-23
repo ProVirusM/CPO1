@@ -32,23 +32,33 @@
     const window = ref()
 
     function itemChecked(item,isChecked){
-        if(isChecked){
-            console.log(item)
-            items.value = items.value.filter((filtered1)=>{return filtered1 !== item})
-            selectedItems.value.push(item)
-        }else{
-            selectedItems.value = selectedItems.value.filter((filtered1)=>{return filtered1 !== item})
-        }
-            
+        console.log(isChecked)
+        console.log(item)
+        selectedItems.value.push(item)
+        items.value = items.value.filter((filtered1)=>{return filtered1 !== item})
+        
+    }
+
+    function itemUnchecked(item,isChecked){
+        items.value.push(item)
+        selectedItems.value = selectedItems.value.filter((filtered1)=>{return filtered1 !== item})
     }
 
     const checkbox = ref(null)
     function clearFilter(){
         selectedItems.value = []
-        checkbox.value.unCheck
+        items.value = props.items
     }
     const trueref = ref(true)
+    const falseref = ref(false)
     onClickOutside(window,event=>{dropDownVisible.value = false})
+
+    const inputModel = ref('')
+    function filterBySearch(searchValue){
+        const set = new Set(selectedItems.value)
+        items.value = props.items.filter(elem=>!set.has(elem))
+        items.value = items.value.filter((filtered)=>{return filtered.toLowerCase().includes(searchValue.toLowerCase())})
+    }
 </script>
 
 <template>
@@ -71,14 +81,14 @@
         <div v-show="dropDownVisible" class="shadow absolute top-full bg-[#EBEBEB] p-4 w-fit flex flex-col gap-4 z-index rounded-xl right-2/4 translate-x-1/2">
             <div class="text-[21px] font-medium">{{ props.text }}</div>
             <div class="flex items-center gap-2 "> 
-                <InputField color="primary" width-type="auto" placeholder="Поиск..."></InputField>
+                <InputField @changed="filterBySearch(inputModel)" v-model="inputModel" color="primary" width-type="auto" placeholder="Поиск..."></InputField>
                 <div class="p-2 bg-[#1A1A1A] rounded-xl">
                     <Search color="#F7F7F7"/>
                 </div>
             </div>
             <div class="h-[200px] overflow-auto flex flex-col gap-4">
-                <CheckBox v-model="trueref" @changed="(isChecked)=>itemChecked(item,isChecked)" v-for="item in selectedItems" :title="item"/>
-                <CheckBox @changed="(isChecked)=>itemChecked(item,isChecked)" v-for="item in items" :title="item"></CheckBox>
+                <CheckBox behavior="manual" :checked="true" @changed="(isChecked)=>itemUnchecked(item,isChecked)" v-for="item in selectedItems" :title="item"/>
+                <CheckBox behavior="manual" :checked="false" @changed="(isChecked)=>itemChecked(item,isChecked)" v-for="item in items" :title="item"></CheckBox>
             </div>
             
         </div>
