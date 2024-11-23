@@ -6,6 +6,13 @@
 parameters:
 
 services:
+    App\Security\CustomAuthenticationSuccessHandler:
+        arguments:
+            $jwtManager: '@lexik_jwt_authentication.jwt_manager'
+            $dispatcher: '@event_dispatcher'
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+            - { name: 'lexik_jwt_authentication.success_handler' }
     Symfony\Component\Serializer\SerializerInterface: '@serializer'
     # default configuration for services in *this* file
     _defaults:
