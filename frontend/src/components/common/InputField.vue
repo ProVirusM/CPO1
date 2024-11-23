@@ -7,12 +7,13 @@
       <input
         v-model="model"
         @input="$emit('changed')"
-        :placeholder="placeholder"
-        :id="title"
-        :name="title"
-        :type="title"
+        :placeholder="props.placeholder"
+        :id="props.title"
+        :name="props.title"
+        :type="props.title"
+        :disabled="props.disabled"
         required
-        class="block w-[450px] h-[41px] rounded-[12px] focus:bg-[#F7F7F7] bg-[#EBEBEB] pl-[16px] pt-[8px] pb-[8px] font-golos font-regular text-[21px] text-[#191919] outline-[#00C257] shadow-md"
+        class="block w-[450px] h-[41px] rounded-[12px] focus:bg-[#F7F7F7] border-[1px] bg-[#EBEBEB] pl-[16px] pt-[8px] pb-[8px] font-golos border-solid border-[#D9D9D9] font-regular text-[21px] text-[#191919] outline-[#00C257]"
         :class="[widthStyle,colorStyle]"
         />
     </div>
@@ -34,6 +35,11 @@ const props = defineProps({
     type: String,
     validator: value => ['primary','secondary'].includes(value),
     default: 'secondary'
+  },
+  disabled: {
+    type: Boolean,
+    validator: value => [true,false].includes(value),
+    default: false
   }
 })
 
