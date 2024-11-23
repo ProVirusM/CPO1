@@ -16,8 +16,11 @@ class Event
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $ekp_id = null;
+    // #[ORM\Column]
+    // private ?int $ekp_id = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ekp_id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
