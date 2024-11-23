@@ -26,9 +26,20 @@ class RegistrationController extends AbstractController
             return $this->json(['error' => 'Email and password are required'], 400);
         }
 
+        if (empty($data['name'])) {
+            return $this->json(['error' => 'Name is required'], 400);
+        }
+
+        // Проверяем, существует ли пользователь с таким email
+        $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if ($existingUser) {
+            return $this->json(['error' => 'User with this email already exists'], 400);
+        }
+
         // Создаем нового пользователя
         $user = new User();
         $user->setEmail($data['email']);
+        $user->setName($data['name']); // Устанавливаем имя пользователя
 
         // Хэшируем пароль
         $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
