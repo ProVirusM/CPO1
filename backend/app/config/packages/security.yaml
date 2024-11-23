@@ -29,6 +29,7 @@ security:
         api:
             pattern:   ^/api
             stateless: true
+            methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE']
             jwt: ~
 
     access_control:
