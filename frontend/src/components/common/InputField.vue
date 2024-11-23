@@ -43,7 +43,7 @@ const widthStyle = ref('')
 const colorStyle = ref('')
 
 if(props.widthType === 'auto'){
-  widthStyle.value = 'w-auto'
+  widthStyle.value = 'w-full'
 }
 if(props.color === 'primary'){
   colorStyle.value = 'bg-[#F7F7F7]'

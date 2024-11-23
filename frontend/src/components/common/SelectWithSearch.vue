@@ -79,7 +79,7 @@
             </div>
             
         </div>
-        <div v-show="dropDownVisible" class="shadow absolute top-full bg-[#EBEBEB] p-4 w-fit flex flex-col gap-4 z-index rounded-xl right-2/4 translate-x-1/2">
+        <div v-show="dropDownVisible" class="shadow absolute top-full bg-[#EBEBEB] p-4 min-w-[350px] flex flex-col gap-4 z-index rounded-xl right-2/4 translate-x-1/2">
             <div class="text-[21px] font-medium">{{ props.text }}</div>
             <div class="flex items-center gap-2 "> 
                 <InputField @changed="filterBySearch(inputModel)" v-model="inputModel" color="primary" width-type="auto" placeholder="Поиск..."></InputField>
