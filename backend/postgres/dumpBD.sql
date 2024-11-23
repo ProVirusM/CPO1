@@ -404,6 +404,7 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 --
 
 COPY public.country (id, name) FROM stdin;
+1	USA
 \.
 
 
@@ -412,6 +413,7 @@ COPY public.country (id, name) FROM stdin;
 --
 
 COPY public.division (id, title) FROM stdin;
+1	Division 1
 \.
 
 
@@ -432,6 +434,7 @@ DoctrineMigrations\\Version20241123091209	2024-11-23 11:03:26	120
 --
 
 COPY public.event (id, sport_id, division_id, country_id, region_id, place_id, ekp_id, title, from_date, to_date, amount) FROM stdin;
+1	1	1	1	1	1	1	Football Championship 2024	2024-05-15	2024-05-15	1
 \.
 
 
@@ -440,6 +443,7 @@ COPY public.event (id, sport_id, division_id, country_id, region_id, place_id, e
 --
 
 COPY public.event_tag (event_id, tag_id) FROM stdin;
+1	1
 \.
 
 
@@ -448,6 +452,7 @@ COPY public.event_tag (event_id, tag_id) FROM stdin;
 --
 
 COPY public.place (id, name) FROM stdin;
+1	Кот
 \.
 
 
@@ -456,6 +461,7 @@ COPY public.place (id, name) FROM stdin;
 --
 
 COPY public.region (id, name) FROM stdin;
+1	USA
 \.
 
 
@@ -464,6 +470,7 @@ COPY public.region (id, name) FROM stdin;
 --
 
 COPY public.sport (id, title) FROM stdin;
+1	Football
 \.
 
 
@@ -472,6 +479,8 @@ COPY public.sport (id, title) FROM stdin;
 --
 
 COPY public.tag (id, value) FROM stdin;
+1	football
+2	playoffs
 \.
 
 
@@ -490,49 +499,49 @@ COPY public."user" (id, email, password, roles, name) FROM stdin;
 -- Name: country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.country_id_seq', 1, false);
+SELECT pg_catalog.setval('public.country_id_seq', 1, true);
 
 
 --
 -- Name: division_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.division_id_seq', 1, false);
+SELECT pg_catalog.setval('public.division_id_seq', 1, true);
 
 
 --
 -- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.event_id_seq', 1, false);
+SELECT pg_catalog.setval('public.event_id_seq', 2, true);
 
 
 --
 -- Name: place_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.place_id_seq', 1, false);
+SELECT pg_catalog.setval('public.place_id_seq', 1, true);
 
 
 --
 -- Name: region_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.region_id_seq', 1, false);
+SELECT pg_catalog.setval('public.region_id_seq', 1, true);
 
 
 --
 -- Name: sport_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.sport_id_seq', 1, false);
+SELECT pg_catalog.setval('public.sport_id_seq', 1, true);
 
 
 --
 -- Name: tag_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.tag_id_seq', 1, false);
+SELECT pg_catalog.setval('public.tag_id_seq', 2, true);
 
 
 --

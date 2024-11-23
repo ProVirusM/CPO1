@@ -52,36 +52,52 @@ class EventRepository extends ServiceEntityRepository
      * @param array $filters (например, по тегам, спорту и т.д.)
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function findByDateRange(\DateTimeImmutable $startDate, \DateTimeImmutable $endDate, array $filters = []): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('e')
-            ->where('e.from_date >= :startDate')
-            ->andWhere('e.to_date <= :endDate')
-            ->setParameter('startDate', $startDate)
-            ->setParameter('endDate', $endDate);
+    /**
+     * @extends ServiceEntityRepository<Event>
+     */
 
-        // Дополнительные фильтры
+
+    public function findByFilters(array $filters): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        // Фильтрация по дате
+        if (isset($filters['date'])) {
+            if (isset($filters['date']['start'])) {
+                $qb->andWhere('e.startDate >= :start_date')
+                    ->setParameter('start_date', $filters['date']['start']);
+            }
+            if (isset($filters['date']['end'])) {
+                $qb->andWhere('e.endDate <= :end_date')
+                    ->setParameter('end_date', $filters['date']['end']);
+            }
+        }
+
+        // Фильтрация по спорту
         if (isset($filters['sport'])) {
             $qb->andWhere('e.sport = :sport')
                 ->setParameter('sport', $filters['sport']);
         }
 
+        // Фильтрация по стране
         if (isset($filters['country'])) {
             $qb->andWhere('e.country = :country')
                 ->setParameter('country', $filters['country']);
         }
 
+        // Фильтрация по дивизиону
         if (isset($filters['division'])) {
             $qb->andWhere('e.division = :division')
                 ->setParameter('division', $filters['division']);
         }
 
-        if (isset($filters['tags']) && !empty($filters['tags'])) {
+        // Фильтрация по тегам
+        if (isset($filters['tags']) && count($filters['tags']) > 0) {
             $qb->join('e.tags', 't')
                 ->andWhere('t.value IN (:tags)')
                 ->setParameter('tags', $filters['tags']);
         }
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 }
