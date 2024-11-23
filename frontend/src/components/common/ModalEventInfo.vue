@@ -98,9 +98,9 @@
                         <div class="text-xl font-medium">
                             {{ props.participantsAmount }}
                         </div>
+                        <AuthButton title="Добавить в личный календарь"></AuthButton>
                     </div>
                 </div>
-                <AuthButton title="Добавить в личный календарь"></AuthButton>
             </div>
         </Modal>
     </div>
@@ -108,6 +108,7 @@
 
 <script setup>
     import Modal from './Modal.vue';
+    import AuthButton from './AuthButton.vue';
     import {Sparkle,CalendarArrowUp,CalendarArrowDown,Tags,LandPlot,MapPinned,Building2, PersonStanding} from 'lucide-vue-next'
     
     const props = defineProps({
