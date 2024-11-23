@@ -2,17 +2,17 @@
     /*General*/
     --dp-font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell, "Open Sans",
     "Helvetica Neue", sans-serif;
-    --dp-border-radius: 4px; /*Configurable border-radius*/
-    --dp-cell-border-radius: 4px; /*Specific border radius for the calendar cell*/
+    --dp-border-radius: 12px; /*Configurable border-radius*/
+    --dp-cell-border-radius: 12px; /*Specific border radius for the calendar cell*/
     --dp-common-transition: all 0.1s ease-in; /*Generic transition applied on buttons and calendar cells*/
 
     /*Sizing*/
     --dp-button-height: 35px; /*Size for buttons in overlays*/
     --dp-month-year-row-height: 35px; /*Height of the month-year select row*/
     --dp-month-year-row-button-size: 35px; /*Specific height for the next/previous buttons*/
-    --dp-button-icon-height: 20px; /*Icon sizing in buttons*/
+    --dp-button-icon-height: 24px; /*Icon sizing in buttons*/
     --dp-cell-size: 48px; /*Width and height of calendar cell*/
-    --dp-cell-padding: 5px; /*Padding in the cell*/
+    --dp-cell-padding: 10px; /*Padding in the cell*/
     --dp-common-padding: 10px; /*Common padding used*/
     --dp-input-icon-padding: 35px; /*Padding on the left side of the input if icon is present*/
     --dp-input-padding: 6px 30px 6px 12px; /*Padding in the input*/
@@ -26,7 +26,7 @@
     --dp-menu-padding: 6px 8px; /*Menu padding*/
     
     /*Font sizes*/
-    --dp-font-size: 1rem; /*Default font-size*/
+    --dp-font-size: 1.1rem; /*Default font-size*/
     --dp-preview-font-size: 0.8rem; /*Font size of the date preview in the action row*/
     --dp-time-font-size: 0.8rem; /*Font size in the time picker*/
     

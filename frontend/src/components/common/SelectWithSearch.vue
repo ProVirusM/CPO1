@@ -65,10 +65,10 @@
 <template>
     <div ref="window" class="relative w-fit">
         <div @click="dropDownVisible = !dropDownVisible" 
-        class="cursor-pointer relative rounded-xl w-fit p-2 flex flex-row items-center justify-center gap-[10px]"
-        :class="stylesWithItems">
+            class="cursor-pointer relative rounded-xl w-fit pl-2 pr-2 pt-1 pb-1 flex flex-row items-center justify-center gap-[10px] border-solid border-[1px] outline-solid"
+            :class="stylesWithItems">
             <div @click="clearFilter" v-if="somethingSelected">
-                <CircleX />
+                <CircleX color="#2E2E2E" fill="#F7F7F7"/>
             </div>
             
             <div class="text-[21px] font-bold">
@@ -104,4 +104,14 @@
     .z-index{
         z-index: 100;
     }
+    .outline-solid{
+        outline: solid;
+        transition: 0.1s;
+        outline-width: 0px;
+        outline-color: #D9D9D9;
+    }
+    .outline-solid:hover{
+        outline-width: 1px;
+    }
+
 </style>

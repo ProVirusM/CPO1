@@ -46,12 +46,12 @@
                 <div class="text-[32px] font-bold">Подписки</div>
                 <div class="flex flex-row gap-2">
                     <InputField width-type="auto" color="primary" placeholder="Поиск..."></InputField>
-                    <div class="p-2 border-solid border-[1px] border-[#D9D9D9] rounded-xl">
-                        <Search color="black"/>
+                    <div class="p-2 w-10 h-10 flex items-center border-solid border-[1px] border-[#D9D9D9] rounded-xl">
+                        <Search color="black" size="24px"/>
                     </div>
                 </div>
             </div>
-            <div class="flex flex-wrap justify-between gap-4">
+            <div class="flex flex-wrap justify-around gap-4">
                 <SubscribeCard v-for="sub in subscribtions"
                     :name="sub.name"
                     :sport-types="sub.sportTypes"
