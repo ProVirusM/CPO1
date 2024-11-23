@@ -6,9 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Smalot\PdfParser\Parser;
+use App\Entity\Country;
+use App\Entity\Division;
+use App\Entity\Event;
+use App\Entity\Place;
+use App\Entity\Region;
+use App\Entity\Sport;
+use App\Entity\Tag;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 
-// ini_set('memory_limit', '64M');
-  
 class ParserController extends AbstractController
 {
     /**
@@ -37,13 +44,9 @@ class ParserController extends AbstractController
         // Если после строки есть "Основной состав" и начинается перечисление соревнований, то это название спорта
         try {
             return $content[$indexToCheck+1] == "Основной состав" && $this->isIdString(explode(" ", $content[$indexToCheck+2])[0]);
-        } catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {  // Может выскочить в конце файла
             return false;
-            // $cnt = count($content);
-            // $el = $content[$indexToCheck];
-            // throw new \Exception("$cnt : $indexToCheck : $el");
         }
-        // return $content[$indexToCheck+1] == "Основной состав" && $this->isIdString($content[$indexToCheck+2]);
     }
 
     private function getEmptySportObject(): array
@@ -51,7 +54,7 @@ class ParserController extends AbstractController
         return [
             "title" => "",
             "mainDivision" => [],
-            "ReserveDivision" => []
+            "reserveDivision" => []
         ];
     }
 
@@ -148,17 +151,30 @@ class ParserController extends AbstractController
         return $dateObject && $dateObject->format('d.m.Y') === $stringToCheck;
     }
 
-    #[Route('/parser', name: 'app_parser')]
-    public function index(): JsonResponse
+    /**
+     * ПАРСИТ ФАЙЛ ПО УКАЗАННОМУ ПУТИ, ВОЗВРАЩАЕТ МАССИВ ВИДОВ СПОРТА
+     * С СООТВЕТСТВУЮЩИМИ МЕРОПРИЯТИЯМИ
+     */
+    private function parse(string $url): array
     {
         set_time_limit(300); // Увеличиваем лимит времени выполнения
         ini_set('memory_limit', '-1');
-        // $url = 'file:///C:/Users/pc/Desktop/test-1-44.pdf';
-        $url = 'https://storage.minsport.gov.ru/cms-uploads/cms/II_chast_EKP_2024_14_11_24_65c6deea36.pdf';
-        // $url = 'https://storage.minsport.gov.ru/cms-uploads/cms/V_Pi_S_Pvs_30_10_2024_na_sajt_5580a63c30.pdf';
+
+        $opt=array(
+            "ssl"=>array(
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            ),
+        );  
+        $response = file_get_contents($url, false, stream_context_create($opt));
+
+        if ($response === false) {
+            return [];
+        }
 
         $parser = new Parser();
-        $pdf = $parser->parseFile($url);
+        // $pdf = $parser->parseFile($url);
+        $pdf = $parser->parseFile($response);
         $raw_text = mb_convert_encoding($pdf->getText(), 'UTF-8', 'auto');
         $content = explode("\n", $raw_text);
 
@@ -181,7 +197,7 @@ class ParserController extends AbstractController
                 if ($isMainDivision) {
                     $sport['mainDivision'][] = $event;
                 } else {
-                    $sport['ReserveDivision'][] = $event;
+                    $sport['reserveDivision'][] = $event;
                 }
                 $event = $this->getEmptyEventObject();
                 $log[] = [1, $content[$i], $sport];
@@ -311,16 +327,201 @@ class ParserController extends AbstractController
             $parsed[] = $sport;
         }
 
+        return $parsed;
+
+        // return $this->json([
+        //     'status' => 'ok',
+        //     // 'start' => $start_index,
+        //     // 'end' => count($content),
+        //     // 'log' => array_slice($log, (int)round(count($log) * 0.95)),
+        //     'result' => $parsed,
+        //     // 'content' => array_slice($content, (int)count($content) * 0.75),
+        // ]);
+    }
+
+    // TODO: дописать веб-скрапинг странички, убрать заглушку
+    /**
+     * Проверяет страницу минспорта и возвращает ссылку на файл который надо распарсить.
+     * Если файл не изменился с последней проверки, возвращает пустую строку.
+     */
+    private function checkFilePathToParse(): string
+    {
+        // $url = 'file:///C:/Users/pc/Desktop/test-1-44.pdf';
+        // $url = 'file:///home/anatoly/Загрузки/Telegram Desktop/test-1-44.pdf';
+        // $url = '/home/anatoly/hah/pp_50308_tsfo_lip_notfive_lipetskaya_oblast_58/test-1-44.pdf';
+        $url = 'https://storage.minsport.gov.ru/cms-uploads/cms/II_chast_EKP_2024_14_11_24_65c6deea36.pdf';
+        return $url;
+    }
+
+    #[Route('/api/parser', name: 'app_parser')]
+    public function index(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $urlToParse = $this->checkFilePathToParse();
+
+        // отрабатывает не меньше минуты и требует выделения дополнительной памяти
+        $parsed = $this->parse($urlToParse);
+
+        // сразу проходим по составам, они нам известны
+        $division_titles = ['Основной состав', 'Молодежный (резервный) состав'];
+        $division_repository = $entityManager->getRepository(Division::class);
+        foreach($division_titles as $div) {
+            if (!$division_repository->findOneBy(['title' => $div])) {
+                $division = new Division();
+                $division->setTitle($div);
+                $entityManager->persist($division);
+            }
+        }
+
+        // первый проход - заполняем все таблицы кроме соревнований
+        // обеспечит наличие всех нужных записей для создания записей соревнований
+        $sport_repository = $entityManager->getRepository(Sport::class);
+        $tag_repository = $entityManager->getRepository(Tag::class);
+        $country_repository = $entityManager->getRepository(Country::class);
+        $region_repository = $entityManager->getRepository(Region::class);
+        $place_repository = $entityManager->getRepository(Place::class);    // поле city в парсере
+
+        foreach($parsed as $sport_obj) {
+            if (!$sport_repository->findOneBy(['title' => trim($sport_obj['title'])])) {
+                $sport = new Sport();
+                $sport->setTitle(trim($sport_obj['title']));
+                $entityManager->persist($sport);
+            }
+            if (!empty($sport_obj['mainDivision'])) {
+                foreach($sport_obj['mainDivision'] as $comp) {
+                    if (!$country_repository->findOneBy(['name' => trim($comp['country'])])) {
+                        $country = new Country();
+                        $country->setName(trim($comp['country']));
+                        $entityManager->persist($country);
+                    }
+                    if (!empty($comp['region']) && !$region_repository->findOneBy(['name' => trim($comp['region'])])) {
+                        $region = new Region();
+                        $region->setName(trim($comp['region']));
+                        $entityManager->persist($region);
+                    }
+                    if (!$place_repository->findOneBy(['name' => trim($comp['city'])])) {
+                        $place = new Place();
+                        $place->setName(trim($comp['city']));
+                        $entityManager->persist($place);
+                    }
+                    foreach($comp['tags'] as $tag_item) {
+                        if (!$tag_repository->findOneBy(['value' => trim($tag_item)])) {
+                            $tag = new Tag();
+                            $tag->setValue(trim($tag_item));
+                            $entityManager->persist($tag);
+                        }
+                    }
+                }
+            }
+            if (!empty($sport_obj['reserveDivision'])) {
+                foreach($sport_obj['reserveDivision'] as $comp) {
+                    if (!$country_repository->findOneBy(['name' => trim($comp['country'])])) {
+                        $country = new Country();
+                        $country->setName(trim($comp['country']));
+                        $entityManager->persist($country);
+                    }
+                    if (!empty($comp['region']) && !$region_repository->findOneBy(['name' => trim($comp['region'])])) {
+                        $region = new Region();
+                        $region->setName(trim($comp['region']));
+                        $entityManager->persist($region);
+                    }
+                    if (!$place_repository->findOneBy(['name' => trim($comp['city'])])) {
+                        $place = new Place();
+                        $place->setName(trim($comp['city']));
+                        $entityManager->persist($place);
+                    }
+                    foreach($comp['tags'] as $tag_item) {
+                        if (!$tag_repository->findOneBy(['value' => trim($tag_item)])) {
+                            $tag = new Tag();
+                            $tag->setValue(trim($tag_item));
+                            $entityManager->persist($tag);
+                        }
+                    }
+                }
+            }
+        }
+
+        // второй проход - заполняем/обновляем соревнования
+        $event_repository = $entityManager->getRepository(Event::class);
+        foreach($parsed as $sport_obj) {
+            $sport = $sport_repository->findOneBy(['title' => trim($sport_obj['title'])]);
+            if (!empty($sport_obj['mainDivision'])) {
+                foreach($sport_obj['mainDivision'] as $comp) {
+                    $event = $event_repository->findOneBy(['ekp_id' => trim($comp['id'])]);
+                    
+                    if (is_null($event)) {
+                        $event = new Event();
+                        $event->setEkpId(trim($comp['id']));
+                    }
+
+                    $event->setSport($sport);
+                    $event->setDivision($division_repository->findOneBy(['title' => 'Основной состав']));
+                    $event->setTitle(trim($comp['title']));
+                    $event->setFromDate(DateTimeImmutable::createFromFormat('d.m.Y', trim($comp['from_date'])));
+                    $event->setToDate(DateTimeImmutable::createFromFormat('d.m.Y', trim($comp['to_date'])));
+                    $event->setAmount($comp['amount']);
+
+                    $country = $country_repository->findOneBy(['name' => trim($comp['country'])]);
+                    $region = $region_repository->findOneBy(['name' => trim($comp['region'])]); // м.б. null
+                    $place = $place_repository->findOneBy(['name' => trim($comp['city'])]);
+
+                    $event->setCountry($country);
+                    $event->setRegion($region);
+                    $event->setPlace($place);
+
+                    while (!$event->getTags()->isEmpty()) {
+                        $tag = $event->getTags()->first();
+                        $event->removeTag($tag);
+                    }
+                    foreach($comp['tags'] as $tag_item) {
+                        $tag = $tag_repository->findOneBy(['value' => trim($tag_item)]);
+                        $event->addTag($tag);
+                    }
+
+                    $entityManager->persist($event);
+                }
+            }
+            if (!empty($sport_obj['reserveDivision'])) {
+                foreach($sport_obj['reserveDivision'] as $comp) {
+                    $event = $event_repository->findOneBy(['ekp_id' => trim($comp['id'])]);
+                    
+                    if (is_null($event)) {
+                        $event = new Event();
+                        $event->setEkpId(trim($comp['id']));
+                    }
+
+                    $event->setSport($sport);
+                    $event->setDivision($division_repository->findOneBy(['title' => 'Молодежный (резервный) состав']));
+                    $event->setTitle(trim($comp['title']));
+                    $event->setFromDate(DateTimeImmutable::createFromFormat('d.m.Y', trim($comp['from_date'])));
+                    $event->setToDate(DateTimeImmutable::createFromFormat('d.m.Y', trim($comp['to_date'])));
+                    $event->setAmount($comp['amount']);
+
+                    $country = $country_repository->findOneBy(['name' => trim($comp['country'])]);
+                    $region = $region_repository->findOneBy(['name' => trim($comp['region'])]); // м.б. null
+                    $place = $place_repository->findOneBy(['name' => trim($comp['city'])]);
+
+                    $event->setCountry($country);
+                    $event->setRegion($region);
+                    $event->setPlace($place);
+
+                    while (!$event->getTags()->isEmpty()) {
+                        $tag = $event->getTags()->first();
+                        $event->removeTag($tag);
+                    }
+                    foreach($comp['tags'] as $tag_item) {
+                        $tag = $tag_repository->findOneBy(['value' => trim($tag_item)]);
+                        $event->addTag($tag);
+                    }
+
+                    $entityManager->persist($event);
+                }
+            }
+        }
+
+        $entityManager->flush();    // сохранение всех изменений в бд
+
         return $this->json([
-            'status' => 'ok',
-            // 'start' => $start_index,
-            // 'end' => count($content),
-            // 'log' => array_slice($log, (int)round(count($log) * 0.95)),
-            'result' => $parsed,
-            // 'content' => array_slice($content, (int)count($content) * 0.75),
+            'success' => true
         ]);
     }
 }
-
-
-
