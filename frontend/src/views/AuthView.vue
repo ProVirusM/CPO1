@@ -37,9 +37,11 @@ import AuthButton from '@/components/common/AuthButton.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useLoginStore } from '@/stores/loginStore'
+import { useToast } from 'vue-toastification'
 
 const router = useRouter()
 const loginStore = useLoginStore()
+const toast = useToast()
 
 console.log()
 
@@ -52,8 +54,14 @@ const loginStatus = ref('')
 const handleLogin = async () => {
   const success = await loginStore.checkLogin(email.value, password.value)
   loginStatus.value = success ? 'login successful' : 'login failed'
-
-  loginStore.logged ? router.push('/app') : alert('Неправильная почта или пароль')
+  
+  //loginStore.logged ? toast.success('Добро пожаловать, '+loginStore.username+'!') 
+  if(loginStore.logged) {
+    toast.success('Добро пожаловать, '+loginStore.username+'!')
+    router.push('/app'); 
+  }else{
+    toast.error('Вы ввели неверные данные для входа')
+  }
 }
 </script>
 

@@ -7,7 +7,7 @@
                 <div class="text-[32px] font-bold">Аккаунт</div>
                 <div class="gap-1 flex flex-col">
                     <div class="text-sm font-bold">Как к вам обращаться</div>
-                    <InputField color="primary" width-type="auto" placeholder="Ваше имя..."></InputField>
+                    <InputField v-model="loginStore.username" color="primary" width-type="auto" placeholder="Ваше имя..."></InputField>
                 </div>
             </div>
 
@@ -28,7 +28,7 @@
                     <div class="flex flex-col gap-3">
                         <div class="gap-1 flex flex-col">
                             <div class="text-sm font-bold">Активная почта</div>
-                            <InputField color="primary" width-type="auto" v-model="currentMail" :disabled="true"></InputField>
+                            <InputField color="primary" width-type="auto" v-model="loginStore.email2" :disabled="true"></InputField>
                         </div>
                         <div class="gap-1 flex flex-col">
                             <div class="text-sm font-bold">Новая почта</div>
@@ -72,8 +72,10 @@ import { ref } from 'vue';
 import InputField from './common/InputField.vue';
 import AuthButton from './common/AuthButton.vue';
 import SubscribeCard from './common/SubscribeCard.vue';
+import { useLoginStore } from '@/stores/loginStore';
 import { Database, Search } from 'lucide-vue-next';
 const currentMail = ref('mail@mail.ru')
+const loginStore = useLoginStore()
 
 const subscribtions = ref([{
     name: 'Название подписки',
