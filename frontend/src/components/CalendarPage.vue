@@ -7,30 +7,32 @@
   import multiMonthPlugin from '@fullcalendar/multimonth'
   import AuthButton from './common/AuthButton.vue'
   import Modal from './common/Modal.vue'
+  import { watch } from 'vue'
   import ModalEventInfo from './common/ModalEventInfo.vue'
   import SelectWithSearch from './common/SelectWithSearch.vue'
 
   import { ref } from 'vue'
 
   async function eventClick(info){
-    console.log(info.event.id)
+    console.log(info.event.extendedProps.data)
+    pickedEvent.value = {...info.event.extendedProps.data}
     info.el.style.borderColor = 'red';
     eventModalVisible.value = true
   } 
+  const eventsModel = defineModel()
+  const pickedEvent = ref(null)
+  const events = ref([])
+  watch(()=>eventsModel.value,()=>{
+    events.value = eventsModel.value.map((event)=>({id: event.ekp_id,title:event.sport +' '+ event.title,start: event.from_date,end: event.to_date,data: event}))
+    options.value.events = events.value
+  })
 
   const eventModalVisible = ref(false)
 
   const options = ref({
       initialView: 'dayGridMonth',
       eventClick: eventClick,
-      events: [
-          { title: 'event 1',id: 1, start: '2024-11-22T10:00',end: '2024-11-23T13:00' },
-          { title: 'event 2', date: '2024-11-23' },
-          { title: 'event 3', date: '2024-11-23' },
-          { title: 'event 4', date: '2024-11-23' },
-          { title: 'event 5', date: '2024-11-23' },
-          { title: 'event 6', date: '2024-11-23' },
-        ],
+      events: events.value,
       headerToolbar: {
         start: 'title',
         center:'timeGridDay,timeGridWeek,dayGridMonth,multiMonthYear listWeek,listMonth',
@@ -57,16 +59,17 @@
           <b>{{ arg.event.title }}</b>
         </template>
     </FullCalendar>
-    <ModalEventInfo v-model="eventModalVisible" 
-        city="Липецк"
-        country="Россия"
-        :dateStart="new Date('02.03.2025')"
-        :dateEnd="new Date('02.03.2025')"
-        participantsAmount="228"
-        region="Липецкая область"
-        sportType="Бадминтон"
-        sportSubType="Основной состав"
-        :tags="['Мужики','Еще кто-то']"
+    <ModalEventInfo v-if="pickedEvent" v-model="eventModalVisible" 
+        :id="pickedEvent.ekp_id"
+        :city="pickedEvent.place"
+        :country="pickedEvent.country"
+        :dateStart="new Date(pickedEvent.from_date)"
+        :dateEnd="new Date(pickedEvent.to_date)"
+        :participantsAmount="pickedEvent.amount"
+        :region="pickedEvent.region"
+        :sportType="pickedEvent.sport"
+        :sportSubType="pickedEvent.division"
+        :tags="pickedEvent.tags"
         />
   </div>
 </template>

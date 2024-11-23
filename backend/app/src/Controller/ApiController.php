@@ -142,12 +142,16 @@ class ApiController extends AbstractController
     #[Route('/tags', name: 'app_tags')]
     public function getTags(EntityManagerInterface $entityManager): JsonResponse
     {
+        ini_set('memory_limit', '-1');
         $tags_repository = $entityManager->getRepository(Tag::class);
         
         $data = [];
 
-        foreach ($tags_repository->findAll() as $tag) {
-            $data[] = $tag->getValue();
+        foreach ($tags_repository->findBy([], null, 100) as $tag) {
+            $val = $tag->getValue();
+            if (!in_array($val, $data)) {
+                $data[] = $val;
+            }
         }
 
         return $this->json([
@@ -156,4 +160,5 @@ class ApiController extends AbstractController
             'data' => $data
         ]);
     }
+
 }

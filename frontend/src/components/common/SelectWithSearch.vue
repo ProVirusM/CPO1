@@ -1,117 +1,181 @@
 <script setup>
-    import { ref } from 'vue';
-    import { watch } from 'vue';
-    import {CircleX,ChevronDown, Search} from 'lucide-vue-next'
-    import { onClickOutside } from '@vueuse/core';
-    import CheckBox from './CheckBox.vue';
-    
-    import InputField from './InputField.vue';
+import { ref } from 'vue'
+import { watch } from 'vue'
+import { CircleX, ChevronDown, Search } from 'lucide-vue-next'
+import { onClickOutside } from '@vueuse/core'
+import CheckBox from './CheckBox.vue'
+import { defineEmits } from 'vue'
 
-    const props = defineProps({
-        text: String,
-        items: Array,
-        
-    })
+import InputField from './InputField.vue'
 
-    const items = ref(props.items)
-    const selectedItems = defineModel()
-    selectedItems.value = []
+const props = defineProps({
+  text: String,
+  items: Array,
+})
 
-    watch(()=>selectedItems.value.length, ()=>{
-        console.log({...selectedItems.value})
-        if(selectedItems.value.length > 0){
-            somethingSelected.value = true
-            stylesWithItems.value = ["text-[#F7F7F7]","bg-[#2E2E2E]"]
-        }else{
-            somethingSelected.value = false
-            stylesWithItems.value = ref([])
-        }
-    })
-    const stylesWithItems = ref([])
-    const somethingSelected = ref(false)
-    const dropDownVisible = ref(false)
-    const window = ref()
+const items = ref(props.items)
+const selectedItems = defineModel()
+selectedItems.value = []
+watch(
+  () => props.items,
+  () => {
+    items.value = props.items
+  },
+)
 
-    function itemChecked(item,isChecked){
-        console.log(isChecked)
-        console.log(item)
-        selectedItems.value.push(item)
-        items.value = items.value.filter((filtered1)=>{return filtered1 !== item})
-        
+watch(
+  () => selectedItems.value.length,
+  () => {
+    console.log({ ...selectedItems.value })
+    if (selectedItems.value.length > 0) {
+      somethingSelected.value = true
+      stylesWithItems.value = ['text-[#F7F7F7]', 'bg-[#2E2E2E]']
+    } else {
+      somethingSelected.value = false
+      stylesWithItems.value = ref([])
     }
+  },
+)
 
-    function itemUnchecked(item,isChecked){
-        items.value.push(item)
-        selectedItems.value = selectedItems.value.filter((filtered1)=>{return filtered1 !== item})
-    }
+watch(
+  () => props.items,
+  () => {
+    items.value = props.items
+  },
+)
 
-    const checkbox = ref(null)
-    function clearFilter(){
-        selectedItems.value = []
-        items.value = props.items
+watch(
+  () => selectedItems.value.length,
+  () => {
+    console.log({ ...selectedItems.value })
+    if (selectedItems.value.length > 0) {
+      somethingSelected.value = true
+      stylesWithItems.value = ['text-[#F7F7F7]', 'bg-[#2E2E2E]']
+    } else {
+      somethingSelected.value = false
+      stylesWithItems.value = ref([])
     }
-    const trueref = ref(true)
-    const falseref = ref(false)
-    onClickOutside(window,event=>{dropDownVisible.value = false})
+  },
+)
+const stylesWithItems = ref([])
+const somethingSelected = ref(false)
+const dropDownVisible = ref(false)
+const window = ref()
 
-    const inputModel = ref('')
-    function filterBySearch(searchValue){
-        const set = new Set(selectedItems.value)
-        items.value = props.items.filter(elem=>!set.has(elem))
-        items.value = items.value.filter((filtered)=>{return filtered.toLowerCase().includes(searchValue.toLowerCase())})
-    }
+function itemChecked(item, isChecked) {
+  console.log(isChecked)
+  console.log(item)
+  selectedItems.value.push(item)
+  items.value = items.value.filter((filtered1) => {
+    return filtered1 !== item
+  })
+}
+
+function itemUnchecked(item, isChecked) {
+  items.value.push(item)
+  selectedItems.value = selectedItems.value.filter((filtered1) => {
+    return filtered1 !== item
+  })
+}
+
+const checkbox = ref(null)
+function clearFilter() {
+  selectedItems.value = []
+  items.value = props.items
+}
+const trueref = ref(true)
+const falseref = ref(false)
+onClickOutside(window, (event) => {
+  dropDownVisible.value = false
+})
+
+const inputModel = ref('')
+function filterBySearch(searchValue) {
+  const set = new Set(selectedItems.value)
+  items.value = props.items.filter((elem) => !set.has(elem))
+  items.value = items.value.filter((filtered) => {
+    return filtered.toLowerCase().includes(searchValue.toLowerCase())
+  })
+}
+
+const emit = defineEmits(['open'])
+
+const emitOpen = () => {
+  emit('open')
+}
 </script>
 
 <template>
-    <div ref="window" class="relative w-fit">
-        <div @click="dropDownVisible = !dropDownVisible" 
-            class="cursor-pointer relative rounded-xl w-fit pl-2 pr-2 pt-1 pb-1 flex flex-row items-center justify-center gap-[10px] border-solid border-[1px] outline-solid"
-            :class="stylesWithItems">
-            <div @click="clearFilter" v-if="somethingSelected">
-                <CircleX color="#2E2E2E" fill="#F7F7F7"/>
-            </div>
-            
-            <div class="text-[21px] font-bold">
-                {{ props.text }}
-            </div>
-            <div>
-                <ChevronDown />
-            </div>
-            
-        </div>
-        <div v-show="dropDownVisible" class="shadow absolute top-full bg-[#EBEBEB] p-4 min-w-[350px] flex flex-col gap-4 z-index rounded-xl right-2/4 translate-x-1/2">
-            <div class="text-[21px] font-medium">{{ props.text }}</div>
-            <div class="flex items-center gap-2 "> 
-                <InputField @changed="filterBySearch(inputModel)" v-model="inputModel" color="primary" width-type="auto" placeholder="Поиск..."></InputField>
-                <div class="p-2 bg-[#1A1A1A] rounded-xl">
-                    <Search color="#F7F7F7"/>
-                </div>
-            </div>
-            <div class="h-[200px] overflow-auto flex flex-col gap-4">
-                <CheckBox behavior="manual" :checked="true" @changed="(isChecked)=>itemUnchecked(item,isChecked)" v-for="item in selectedItems" :title="item"/>
-                <CheckBox behavior="manual" :checked="false" @changed="(isChecked)=>itemChecked(item,isChecked)" v-for="item in items" :title="item"></CheckBox>
-            </div>
-            
-        </div>
+  <div @click="emitOpen" ref="window" class="relative w-fit">
+    <div
+      @click="dropDownVisible = !dropDownVisible"
+      class="cursor-pointer relative rounded-xl w-fit pl-2 pr-2 pt-1 pb-1 flex flex-row items-center justify-center gap-[10px] border-solid border-[1px] outline-solid"
+      :class="stylesWithItems"
+    >
+      <div @click="clearFilter" v-if="somethingSelected">
+        <CircleX color="#2E2E2E" fill="#F7F7F7" />
+      </div>
+
+      <div class="text-[21px] font-bold">
+        {{ props.text }}
+      </div>
+      <div>
+        <ChevronDown />
+      </div>
     </div>
+    <div
+      v-show="dropDownVisible"
+      class="shadow absolute top-full bg-[#EBEBEB] p-4 min-w-[350px] flex flex-col gap-4 z-index rounded-xl right-2/4 translate-x-1/2"
+    >
+      <div class="text-[21px] font-medium">{{ props.text }}</div>
+      <div class="flex items-center gap-2">
+        <InputField
+          @changed="filterBySearch(inputModel)"
+          v-model="inputModel"
+          color="primary"
+          width-type="auto"
+          placeholder="Поиск..."
+        ></InputField>
+        <div class="p-2 bg-[#1A1A1A] rounded-xl">
+          <Search color="#F7F7F7" />
+        </div>
+      </div>
+      <div class="h-[200px] overflow-auto flex flex-col gap-4">
+        <CheckBox
+          behavior="manual"
+          :checked="true"
+          @changed="(isChecked) => itemUnchecked(item, isChecked)"
+          v-for="item in selectedItems"
+          :title="item"
+        />
+        <CheckBox
+          behavior="manual"
+          :checked="false"
+          @changed="(isChecked) => itemChecked(item, isChecked)"
+          v-for="item in items"
+          :title="item"
+        ></CheckBox>
+      </div>
+    </div>
+  </div>
 </template>
 
-
 <style lang="scss" scoped>
-    .shadow{
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-    }
-    .z-index{
-        z-index: 100;
-    }
-    .outline-solid{
-        outline: solid;
-        transition: 0.1s;
-        outline-width: 0px;
-        outline-color: #D9D9D9;
-    }
-    .outline-solid:hover{
-        outline-width: 1px;
-    }
-
+.shadow {
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.z-index {
+  z-index: 100;
+}
+.outline-solid {
+  outline: solid;
+  transition: 0.1s;
+  outline-width: 0px;
+  outline-color: #d9d9d9;
+}
+.outline-solid:hover {
+  outline-width: 1px;
+}
 </style>
