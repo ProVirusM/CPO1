@@ -33,6 +33,7 @@
   import ModalSubscribe from './common/ModalSubscribe.vue';
   import VueDatePicker from '@vuepic/vue-datepicker';
   import ParticipantsPicker from './common/ParticipantsPicker.vue';
+  
   import { Bell } from 'lucide-vue-next';
   import { ref } from 'vue';
   
@@ -48,6 +49,12 @@
   const selectDate = () => {
     dp.value.selectDate();
   }
+
+  const events = ref([])
+  async function loadEvents(){
+    events.value = await eventStore.getPersonalEvents()
+  }
+  loadEvents()
 </script>
 
 <style lang="scss" scoped></style>
