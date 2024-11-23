@@ -6,6 +6,7 @@ use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use Doctrine\ORM\QueryBuilder;
 /**
  * @extends ServiceEntityRepository<Event>
  */
@@ -40,4 +41,47 @@ class EventRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+
+    /**
+     * Фильтрация событий по диапазону дат и дополнительным фильтрам.
+     *
+     * @param \DateTimeImmutable $startDate
+     * @param \DateTimeImmutable $endDate
+     * @param array $filters (например, по тегам, спорту и т.д.)
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findByDateRange(\DateTimeImmutable $startDate, \DateTimeImmutable $endDate, array $filters = []): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.from_date >= :startDate')
+            ->andWhere('e.to_date <= :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate);
+
+        // Дополнительные фильтры
+        if (isset($filters['sport'])) {
+            $qb->andWhere('e.sport = :sport')
+                ->setParameter('sport', $filters['sport']);
+        }
+
+        if (isset($filters['country'])) {
+            $qb->andWhere('e.country = :country')
+                ->setParameter('country', $filters['country']);
+        }
+
+        if (isset($filters['division'])) {
+            $qb->andWhere('e.division = :division')
+                ->setParameter('division', $filters['division']);
+        }
+
+        if (isset($filters['tags']) && !empty($filters['tags'])) {
+            $qb->join('e.tags', 't')
+                ->andWhere('t.value IN (:tags)')
+                ->setParameter('tags', $filters['tags']);
+        }
+
+        return $qb;
+    }
 }
