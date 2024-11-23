@@ -27,6 +27,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups("user:read")]
+    private ?string $name = null;
+
     // Геттер для поля id
     public function getId(): ?int
     {
@@ -46,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Геттер для поля password (требуется PasswordAuthenticatedUserInterface)
+    // Геттер для поля password
     public function getPassword(): ?string
     {
         return $this->password;
@@ -56,6 +60,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
+    }
+
+    // Геттер для поля name
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    // Сеттер для поля name
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
         return $this;
     }
 
