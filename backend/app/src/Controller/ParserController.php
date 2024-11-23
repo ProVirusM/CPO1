@@ -148,7 +148,7 @@ class ParserController extends AbstractController
         return $dateObject && $dateObject->format('d.m.Y') === $stringToCheck;
     }
 
-    #[Route('/parser', name: 'app_parser')]
+    #[Route('/api/parser', name: 'app_parser')]
     public function index(): JsonResponse
     {
         set_time_limit(300); // Увеличиваем лимит времени выполнения
