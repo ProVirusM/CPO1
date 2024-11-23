@@ -9,6 +9,13 @@
       <SelectWithSearch text="Пол, возрастная группа"></SelectWithSearch>
       <SelectWithSearch text="Сроки проведения"></SelectWithSearch>
       <SelectWithSearch text="Тип"></SelectWithSearch>
+      <div class="w-128 flex items-center">
+        <VueDatePicker width="200px" ref="dp" v-model="dateRange" locale="ru" :range="true" :enable-time-picker="false">
+          <template #action-buttons>
+            <p class="bg-[#00DB62] p-2 rounded-xl font-bold" @click="selectDate">Выбрать интервал</p>
+          </template>
+        </VueDatePicker>
+      </div>
       <button @click="modalSubscribeVisible = true" class="bg-[#312E5C] p-2 rounded-xl text-xl text-[#F7F7F7] font-bold flex gap-2 items-center active:bg-[#292650]">
         <Bell></Bell>
         Подписаться
@@ -24,12 +31,20 @@
   import CalendarPage from './CalendarPage.vue';
   import SelectWithSearch from './common/SelectWithSearch.vue';
   import ModalSubscribe from './common/ModalSubscribe.vue';
+  import VueDatePicker from '@vuepic/vue-datepicker';
   import { Bell } from 'lucide-vue-next';
   import { ref } from 'vue';
   
   const model = ref([])
   const model2 = ref([])
+  const dateRange = ref([])
   const modalSubscribeVisible = ref(false)
+
+  const dp = ref();
+
+  const selectDate = () => {
+    dp.value.selectDate();
+  }
 </script>
 
 <style lang="scss" scoped></style>
