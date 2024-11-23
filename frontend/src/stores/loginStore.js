@@ -17,6 +17,7 @@ export const useLoginStore = defineStore('login', () => {
   let image = ref('')
   let username = ref('')
   let email = ref('')
+  let email2 = ref('')
   const router = useRouter()
   let headers = computed(() => {
     return {
@@ -25,6 +26,7 @@ export const useLoginStore = defineStore('login', () => {
     }
   })
 
+  // Авторизация
   async function checkLogin(email, password) {
     return axios
       .post(import.meta.env.VITE_BASE_URL + '/api/login_check', {
@@ -33,11 +35,36 @@ export const useLoginStore = defineStore('login', () => {
       })
       .then((response) => {
         console.log(response.data)
+        email2.value = response.data.email
+        logged.value = true
+        username.value = response.data.name
+        token.value = response.data.token
+
+        console.log(logged.value)
+
         return true
       })
       .catch((error) => {
         return false
       })
+  }
+
+  // Регистрация
+  async function apiRegister(email, name, password) {
+    return axios
+      .post(import.meta.env.VITE_BASE_URL + '/api/register', {
+        email: email,
+        name: name,
+        password: password,
+      })
+      .then((response) => {
+        console.log(response.data)
+      })
+  }
+
+  const logout = () => {
+    logged.value = false
+    token.value = ''
   }
 
   //   async function login(username, password) {
@@ -101,9 +128,12 @@ export const useLoginStore = defineStore('login', () => {
   //   }
 
   return {
+    logout,
+    apiRegister,
     email,
     checkLogin,
     token,
+    email2,
     // getUserInfo,
     logged,
     username,

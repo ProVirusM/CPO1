@@ -29,6 +29,13 @@
       height="24px"
       :color="isActive ? '#F7F7F7' : '#F7F7F7'"
     />
+    <LogOut
+      v-if="typeIcon === 'LogOut'"
+      class="mt-[1.5px] ml-[10px]"
+      width="24px"
+      height="24px"
+      :color="isActive ? '#F7F7F7' : '#F7F7F7'"
+    />
     <p class="font-golos font-medium text-[21px] text-[#F7F7F7] pb-[0.5px]">
       {{ title }}
     </p>
@@ -36,7 +43,7 @@
 </template>
 
 <script setup>
-import { House, CalendarSearch, CircleUserRound } from 'lucide-vue-next'
+import { House, CalendarSearch, CircleUserRound, LogOut } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
