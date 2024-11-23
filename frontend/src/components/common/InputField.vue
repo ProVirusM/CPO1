@@ -6,6 +6,7 @@
     <div class="">
       <input
         v-model="model"
+        @input="$emit('changed')"
         :placeholder="placeholder"
         :id="title"
         :name="title"
@@ -35,6 +36,8 @@ const props = defineProps({
     default: 'secondary'
   }
 })
+
+const emits = defineEmits('changed')
 const model = defineModel()
 const widthStyle = ref('')
 const colorStyle = ref('')
