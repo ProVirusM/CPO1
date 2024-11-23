@@ -29,7 +29,7 @@ class ApiController extends AbstractController
 
         return $this->json([
             'ok' => true,
-            'len' => count($sports_repository->findAll()),
+            // 'len' => count($sports_repository->findAll()),
             'data' => $data
         ]);
     }
@@ -47,7 +47,7 @@ class ApiController extends AbstractController
 
         return $this->json([
             'ok' => true,
-            'len' => count($countries_repository->findAll()),
+            // 'len' => count($countries_repository->findAll()),
             'data' => $data
         ]);
     }
