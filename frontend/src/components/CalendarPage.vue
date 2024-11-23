@@ -60,6 +60,7 @@
         </template>
     </FullCalendar>
     <ModalEventInfo v-if="pickedEvent" v-model="eventModalVisible" 
+        :id="pickedEvent.ekp_id"
         :city="pickedEvent.place"
         :country="pickedEvent.country"
         :dateStart="new Date(pickedEvent.from_date)"

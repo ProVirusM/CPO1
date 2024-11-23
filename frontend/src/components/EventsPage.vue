@@ -2,8 +2,8 @@
   <div class="w-auto p-5 flex flex-col gap-4">
     <div class="flex flex-wrap gap-2 pl-20 pr-20">
       <SelectWithSearch text="Вид спорта"></SelectWithSearch>
-      <SelectWithSearch :items="events.map((event)=> event.title)" v-model="model" text="Дисциплина"></SelectWithSearch>
-      <SelectWithSearch :items="['Физра','Бег трусцой','Абоба', 'Климсаныч']" v-model="model2" text="Программа"></SelectWithSearch>
+      <SelectWithSearch  text="Дисциплина"></SelectWithSearch>
+      <SelectWithSearch text="Программа"></SelectWithSearch>
       <SelectWithSearch text="Место проведения"></SelectWithSearch>
       <SelectWithSearch text="Пол, возрастная группа"></SelectWithSearch>
       <SelectWithSearch text="Сроки проведения"></SelectWithSearch>

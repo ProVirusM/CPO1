@@ -13,7 +13,7 @@
           </li>
           <li>
             <router-link to="/app/events">
-              <ButtonMenu title="Мероприятия" typeIcon="calendar-search" routeName="events" />
+              <ButtonMenu title="Личный календарь" typeIcon="calendar-search" routeName="events" />
             </router-link>
           </li>
           <li>

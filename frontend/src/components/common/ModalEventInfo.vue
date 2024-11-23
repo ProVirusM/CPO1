@@ -99,7 +99,7 @@
                             {{ props.participantsAmount }}
                         </div>
                         <div class="flex items-center justify-center">
-                            <AuthButton title="Добавить в личный календарь"></AuthButton>
+                            <AuthButton @click="eventStore.saveEvent(props.id)" title="Добавить в личный календарь"></AuthButton>
                         </div>
                     </div>
                 </div>
@@ -111,9 +111,11 @@
 <script setup>
     import Modal from './Modal.vue';
     import AuthButton from './AuthButton.vue';
+    import { useEventStore } from '@/stores/eventStore';
     import {Sparkle,CalendarArrowUp,CalendarArrowDown,Tags,LandPlot,MapPinned,Building2, PersonStanding} from 'lucide-vue-next'
-    
+    const eventStore = useEventStore()
     const props = defineProps({
+        id: Number,
         sportType: String,
         sportSubType: String,
         title: String,

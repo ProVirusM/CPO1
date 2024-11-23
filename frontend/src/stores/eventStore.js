@@ -17,5 +17,34 @@ export const useEventStore = defineStore('events', () => {
         })
     }
 
-    return { events,getEvents }
+    async function saveEvent(eventId) {
+        return axios
+        .post(import.meta.env.VITE_BASE_URL + '/api/user-event/add',
+            {
+                user_id: loginStore.id,
+                event_id: eventId,
+            },
+            {headers: loginStore.headers}
+        )
+        .then((response) => {
+            console.log(response.data)
+            return response.data
+        })
+    }
+
+    async function getPersonalEvents() {
+        return axios
+        .post(import.meta.env.VITE_BASE_URL + '/api/user-event/get',
+            {
+                user_id: loginStore.id
+            },
+            {headers: loginStore.headers}
+        )
+        .then((response) => {
+            console.log(response.data)
+            return response.data
+        })
+    }
+
+    return { events,getEvents,saveEvent,getPersonalEvents }
 })

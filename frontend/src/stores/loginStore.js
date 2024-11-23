@@ -39,6 +39,7 @@ export const useLoginStore = defineStore('login', () => {
         logged.value = true
         username.value = response.data.name
         token.value = response.data.token
+        id.value = response.data.id
 
         console.log(logged.value)
 
@@ -128,6 +129,7 @@ export const useLoginStore = defineStore('login', () => {
   //   }
 
   return {
+    id,
     logout,
     apiRegister,
     email,
