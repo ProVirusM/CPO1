@@ -392,71 +392,71 @@ class ParserController extends AbstractController
         $region_repository = $entityManager->getRepository(Region::class);
         $place_repository = $entityManager->getRepository(Place::class);    // поле city в парсере
 
-        foreach($parsed as $sport_obj) {
-            if (!$sport_repository->findOneBy(['title' => trim($sport_obj['title'])])) {
-                $sport = new Sport();
-                $sport->setTitle(trim($sport_obj['title']));
-                $entityManager->persist($sport);
-            }
-            if (!empty($sport_obj['mainDivision'])) {
-                foreach($sport_obj['mainDivision'] as $comp) {
-                    if (!$country_repository->findOneBy(['name' => trim($comp['country'])])) {
-                        $country = new Country();
-                        $country->setName(trim($comp['country']));
-                        $entityManager->persist($country);
-                    }
-                    if (!empty($comp['region']) && !$region_repository->findOneBy(['name' => trim($comp['region'])]) ) {
-                        $region = new Region();
-                        $region->setName(trim($comp['region']));
-                        $entityManager->persist($region);
-                    }
-                    if (!$place_repository->findOneBy(['name' => trim($comp['city'])])  ) {
-                        $place = new Place();
-                        $place->setName(trim($comp['city']));
-                        $entityManager->persist($place);
-                    }
-                    foreach($comp['tags'] as $tag_item) {
-                        if (!$tag_repository->findOneBy(['value' => trim($tag_item)])  ) {
-                            if (strlen(trim($tag_item)) < 255) {
-                                $tag = new Tag();
-                                $tag->setValue(trim($tag_item));
-                                $entityManager->persist($tag);
-                            }
-                        }
-                    }
-                }
-            }
-            // if (!empty($sport_obj['reserveDivision'])) {
-            //     foreach($sport_obj['reserveDivision'] as $comp) {
-            //         if ($country_repository->findOneBy(['name' => trim($comp['country'])]) === null) {
-            //             $country = new Country();
-            //             $country->setName(trim($comp['country']));
-            //             $entityManager->persist($country);
-            //         }
-            //         if (!empty($comp['region']) && $region_repository->findOneBy(['name' => trim($comp['region'])]) === null) {
-            //             $region = new Region();
-            //             $region->setName(trim($comp['region']));
-            //             $entityManager->persist($region);
-            //         }
-            //         if ($place_repository->findOneBy(['name' => trim($comp['city'])]) === null) {
-            //             $place = new Place();
-            //             $place->setName(trim($comp['city']));
-            //             $entityManager->persist($place);
-            //         }
-            //         foreach($comp['tags'] as $tag_item) {
-            //             if ($tag_repository->findOneBy(['value' => trim($tag_item)]) === null) {
-            //                 if (strlen(trim($tag_item)) < 255) {
-            //                     $tag = new Tag();
-            //                     $tag->setValue(trim($tag_item));
-            //                     $entityManager->persist($tag);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-        }
-        $entityManager->flush();
-        return $this->json(['ok'=>true]);
+        // foreach($parsed as $sport_obj) {
+        //     if (!$sport_repository->findOneBy(['title' => trim($sport_obj['title'])])) {
+        //         $sport = new Sport();
+        //         $sport->setTitle(trim($sport_obj['title']));
+        //         $entityManager->persist($sport);
+        //     }
+        //     if (!empty($sport_obj['mainDivision'])) {
+        //         foreach($sport_obj['mainDivision'] as $comp) {
+        //             if (!$country_repository->findOneBy(['name' => trim($comp['country'])])) {
+        //                 $country = new Country();
+        //                 $country->setName(trim($comp['country']));
+        //                 $entityManager->persist($country);
+        //             }
+        //             if (!empty($comp['region']) && !$region_repository->findOneBy(['name' => trim($comp['region'])]) ) {
+        //                 $region = new Region();
+        //                 $region->setName(trim($comp['region']));
+        //                 $entityManager->persist($region);
+        //             }
+        //             if (!$place_repository->findOneBy(['name' => trim($comp['city'])])  ) {
+        //                 $place = new Place();
+        //                 $place->setName(trim($comp['city']));
+        //                 $entityManager->persist($place);
+        //             }
+        //             foreach($comp['tags'] as $tag_item) {
+        //                 if (!$tag_repository->findOneBy(['value' => trim($tag_item)])  ) {
+        //                     if (strlen(trim($tag_item)) < 255) {
+        //                         $tag = new Tag();
+        //                         $tag->setValue(trim($tag_item));
+        //                         $entityManager->persist($tag);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     // if (!empty($sport_obj['reserveDivision'])) {
+        //     //     foreach($sport_obj['reserveDivision'] as $comp) {
+        //     //         if ($country_repository->findOneBy(['name' => trim($comp['country'])]) === null) {
+        //     //             $country = new Country();
+        //     //             $country->setName(trim($comp['country']));
+        //     //             $entityManager->persist($country);
+        //     //         }
+        //     //         if (!empty($comp['region']) && $region_repository->findOneBy(['name' => trim($comp['region'])]) === null) {
+        //     //             $region = new Region();
+        //     //             $region->setName(trim($comp['region']));
+        //     //             $entityManager->persist($region);
+        //     //         }
+        //     //         if ($place_repository->findOneBy(['name' => trim($comp['city'])]) === null) {
+        //     //             $place = new Place();
+        //     //             $place->setName(trim($comp['city']));
+        //     //             $entityManager->persist($place);
+        //     //         }
+        //     //         foreach($comp['tags'] as $tag_item) {
+        //     //             if ($tag_repository->findOneBy(['value' => trim($tag_item)]) === null) {
+        //     //                 if (strlen(trim($tag_item)) < 255) {
+        //     //                     $tag = new Tag();
+        //     //                     $tag->setValue(trim($tag_item));
+        //     //                     $entityManager->persist($tag);
+        //     //                 }
+        //     //             }
+        //     //         }
+        //     //     }
+        //     // }
+        // }
+        // $entityManager->flush();
+        // return $this->json(['ok'=>true]);
         // $cnt = 0;
         // второй проход - заполняем/обновляем соревнования
         $event_repository = $entityManager->getRepository(Event::class);
@@ -499,7 +499,7 @@ class ParserController extends AbstractController
                     }
 
                     $entityManager->persist($event);
-
+                    $entityManager->flush();
                     // if ($cnt > 3) {
                     //     $entityManager->flush();
                     //     return $this->json(['ok' => true]);
@@ -542,11 +542,12 @@ class ParserController extends AbstractController
                     }
 
                     $entityManager->persist($event);
+                    $entityManager->flush();
                 }
             }
         }
 
-        $entityManager->flush();    // сохранение всех изменений в бд
+        // $entityManager->flush();    // сохранение всех изменений в бд
 
         return $this->json([
             'success' => true
