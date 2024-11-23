@@ -7,6 +7,7 @@
   import multiMonthPlugin from '@fullcalendar/multimonth'
   import AuthButton from './common/AuthButton.vue'
   import Modal from './common/Modal.vue'
+  import ModalEventInfo from './common/ModalEventInfo.vue'
   import SelectWithSearch from './common/SelectWithSearch.vue'
 
   import { ref } from 'vue'
@@ -56,53 +57,17 @@
           <b>{{ arg.event.title }}</b>
         </template>
     </FullCalendar>
-    <Modal title="Подробнее о мероприятии 2132398123921" v-model="eventModalVisible">
-        <div class="flex flex-col p-5 gap-2">
-            <div>
-                <div class="font-bold">Идентификатор</div>
-                <div class="ml-5">2391239232392</div>
-            </div>
-            <div>
-                <div class="font-bold">Вид спорта</div>
-                <div class="ml-5">Футбольчик</div>
-            </div>
-            
-            <div>
-                <div class="font-bold">Название мероприятия</div>
-                <div class="ml-5">Футбольчик с пацанами на улице (без правил)</div>
-            </div>
-            <div>
-                <div class="font-bold">Тэги</div>
-                <div class="ml-5">Боль, ссадины, хорошее настроение</div>
-            </div>
-            
-            <div>
-                <div class="font-bold">Сроки проведения</div>
-                <div class="ml-5">02.03.2025 - 04.03.2025</div>
-            </div>
-            
-            <div>
-                <div class="font-bold">Количество участников (чел.)</div>
-                <div class="ml-5">255</div>
-            </div>
-            <div class="text-xl font-bold">Место проведения</div>
-            <div>
-                <div class="font-bold">Страна</div>
-                <div class="ml-5">Россия</div>
-                </div>
-            
-          
-            <div>
-                <div class="font-bold">Регион</div>
-                <div class="ml-5">Липецкая область</div>
-            </div>
-            <div>
-                <div class="font-bold">Город</div>
-                <div class="ml-5">Липецк</div>
-            </div>
-            <AuthButton title="Добавить в личный календарь"></AuthButton>
-        </div>
-    </Modal>
+    <ModalEventInfo v-model="eventModalVisible" 
+        city="Липецк"
+        country="Россия"
+        :dateStart="new Date('02.03.2025')"
+        :dateEnd="new Date('02.03.2025')"
+        participantsAmount="228"
+        region="Липецкая область"
+        sportType="Бадминтон"
+        sportSubType="Основной состав"
+        :tags="['Мужики','Еще кто-то']"
+        />
   </div>
 </template>
 

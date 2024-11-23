@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row h-svh ">
     <!-- Навигационная панель -->
-    <nav class="">
+    <nav class="z-30">
       <ul class="flex flex-col gap-[12px] w-[300px] h-[100vh] bg-[#1A1A1A]">
         <img class="w-[268px] h-[213px] mt-[16px]" src="/icons/logo_with_black.svg" />
 
@@ -26,7 +26,7 @@
     </nav>
 
     <!-- Отображение текущей страницы -->
-     <div class="max-h-full overflow-auto w-full">
+     <div class="max-h-full overflow-auto w-full z-50">
       <RouterView />
      </div>
     
