@@ -8,9 +8,15 @@
       </div>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" action="#" method="POST">
-          <InputField label="почта" placeholder="Введите почту..." title="email" />
-          <InputField label="пароль" placeholder="Введите пароль..." title="password" />
+        <form @submit.prevent="handleLogin" class="space-y-6">
+          <InputField v-model="email" label="почта" placeholder="Введите почту..." title="email" />
+          <InputField
+            v-model="password"
+            label="пароль"
+            placeholder="Введите пароль..."
+            title="password"
+            type="password"
+          />
           <AuthButton title="Войти" />
         </form>
 
@@ -29,8 +35,26 @@
 import InputField from '@/components/common/InputField.vue'
 import AuthButton from '@/components/common/AuthButton.vue'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useLoginStore } from '@/stores/loginStore'
 
 const router = useRouter()
+const loginStore = useLoginStore()
+
+// Локальные переменные для email и password
+const email = ref('')
+const password = ref('')
+
+// Обработчик для выполнения checkLogin
+const handleLogin = async () => {
+  const success = await loginStore.checkLogin(email.value, password.value)
+  if (success) {
+    console.log('Логин успешен!')
+  } else {
+    console.error('Ошибка логина')
+    alert('Неверные данные для входа')
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

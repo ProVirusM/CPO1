@@ -1,9 +1,9 @@
 ## Отборочный этап на чемпионат России
 
 ## Первый чек поинт
+
 1. Ссылка на дизайн макета в Figma https://www.figma.com/design/2P8ySbVgW19w3a4MyF0eV0/Хакатон-ФСП.-Ноябрь-2024?node-id=1-3&node-type=frame&t=oZleahV35ovRcKjT-0
 2. Ссылка на гугл дискх архитектуры решения проекта https://drive.google.com/file/d/1AMcT4AANK3kmTWbqst4nt1GcIuB6xlKv/view
-
 
 ## Иструкция по запуску проекта для разработичков
 
@@ -50,5 +50,6 @@
 
 1. Создаем Symfony проект `composer create-project symfony/skeleton:"7.1.*" .`
 2. Создаем Docktrine ORM `composer require symfony/orm-pack`
+3. Для того чтобы сгенерировать ключ `php bin/console lexik:jwt:generate-keypair`
 
 <h1>Если возникают вопросы по настройке или запуску проекта, обращаться в тг `https://t.me/Kn1gor`</h1>
