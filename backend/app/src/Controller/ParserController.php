@@ -392,37 +392,31 @@ class ParserController extends AbstractController
         $region_repository = $entityManager->getRepository(Region::class);
         $place_repository = $entityManager->getRepository(Place::class);    // поле city в парсере
 
-        $countries = [];
-        $tags = [];
-        $regions = [];
-        $places = [];
-
-        // return $this->json(['ok'=>true]);
         foreach($parsed as $sport_obj) {
-            if ($sport_repository->findOneBy(['title' => trim($sport_obj['title'])]) === null) {
+            if (!$sport_repository->findOneBy(['title' => trim($sport_obj['title'])])) {
                 $sport = new Sport();
                 $sport->setTitle(trim($sport_obj['title']));
                 $entityManager->persist($sport);
             }
             if (!empty($sport_obj['mainDivision'])) {
                 foreach($sport_obj['mainDivision'] as $comp) {
-                    if ($country_repository->findOneBy(['name' => trim($comp['country'])]) === null) {
+                    if (!$country_repository->findOneBy(['name' => trim($comp['country'])])) {
                         $country = new Country();
                         $country->setName(trim($comp['country']));
                         $entityManager->persist($country);
                     }
-                    if (!empty($comp['region']) && $region_repository->findOneBy(['name' => trim($comp['region'])]) === null) {
+                    if (!empty($comp['region']) && !$region_repository->findOneBy(['name' => trim($comp['region'])]) ) {
                         $region = new Region();
                         $region->setName(trim($comp['region']));
                         $entityManager->persist($region);
                     }
-                    if ($place_repository->findOneBy(['name' => trim($comp['city'])]) === null) {
+                    if (!$place_repository->findOneBy(['name' => trim($comp['city'])])  ) {
                         $place = new Place();
                         $place->setName(trim($comp['city']));
                         $entityManager->persist($place);
                     }
                     foreach($comp['tags'] as $tag_item) {
-                        if ($tag_repository->findOneBy(['value' => trim($tag_item)]) === null) {
+                        if (!$tag_repository->findOneBy(['value' => trim($tag_item)])  ) {
                             if (strlen(trim($tag_item)) < 255) {
                                 $tag = new Tag();
                                 $tag->setValue(trim($tag_item));

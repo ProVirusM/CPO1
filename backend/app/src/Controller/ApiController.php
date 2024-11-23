@@ -29,6 +29,7 @@ class ApiController extends AbstractController
 
         return $this->json([
             'ok' => true,
+            'len' => count($sports_repository->findAll()),
             'data' => $data
         ]);
     }
