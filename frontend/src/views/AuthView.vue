@@ -41,19 +41,19 @@ import { useLoginStore } from '@/stores/loginStore'
 const router = useRouter()
 const loginStore = useLoginStore()
 
+console.log()
+
 // Локальные переменные для email и password
 const email = ref('')
 const password = ref('')
+const loginStatus = ref('')
 
 // Обработчик для выполнения checkLogin
 const handleLogin = async () => {
   const success = await loginStore.checkLogin(email.value, password.value)
-  if (success) {
-    console.log('Логин успешен!')
-  } else {
-    console.error('Ошибка логина')
-    alert('Неверные данные для входа')
-  }
+  loginStatus.value = success ? 'login successful' : 'login failed'
+
+  loginStore.logged ? router.push('/app') : alert('Неправильная почта или пароль')
 }
 </script>
 

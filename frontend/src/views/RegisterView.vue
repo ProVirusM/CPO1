@@ -10,10 +10,15 @@
       </div>
 
       <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form class="space-y-6" action="#" method="POST">
-          <InputField label="почта" placeholder="Введите почту..." title="email" />
-          <InputField label="имя" placeholder="Введите имя..." title="name" />
-          <InputField label="пароль" placeholder="Введите пароль..." title="password" />
+        <form @submit.prevent="handleRegister" class="space-y-6">
+          <InputField v-model="email" label="почта" placeholder="Введите почту..." title="email" />
+          <InputField v-model="name" label="имя" placeholder="Введите имя..." title="name" />
+          <InputField
+            v-model="password"
+            label="пароль"
+            placeholder="Введите пароль..."
+            title="password"
+          />
           <AuthButton title="Зарегистрироваться" />
         </form>
 
@@ -32,8 +37,24 @@
 import InputField from '@/components/common/InputField.vue'
 import AuthButton from '@/components/common/AuthButton.vue'
 import { useRouter } from 'vue-router'
+import { useLoginStore } from '@/stores/loginStore'
+import { ref } from 'vue'
+
+const loginStore = useLoginStore()
+
+const email = ref('')
+const name = ref('')
+const password = ref('')
 
 const router = useRouter()
+
+const handleRegister = async () => {
+  await loginStore.apiRegister(email.value, name.value, password.value)
+
+  console.log('Данные', email.value, name.value)
+  router.push('/')
+  console.log('YES')
+}
 </script>
 
 <style lang="scss" scoped></style>
