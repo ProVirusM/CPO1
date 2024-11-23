@@ -37,10 +37,12 @@
 import InputField from '@/components/common/InputField.vue'
 import AuthButton from '@/components/common/AuthButton.vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 import { useLoginStore } from '@/stores/loginStore'
 import { ref } from 'vue'
 
 const loginStore = useLoginStore()
+const toast = useToast()
 
 const email = ref('')
 const name = ref('')
@@ -52,6 +54,7 @@ const handleRegister = async () => {
   await loginStore.apiRegister(email.value, name.value, password.value)
 
   console.log('Данные', email.value, name.value)
+  toast.success('Вы успешно зарегистрировались!')
   router.push('/')
   console.log('YES')
 }
