@@ -96,9 +96,7 @@ export const useFilterStore = defineStore('filter', () => {
       .get(import.meta.env.VITE_BASE_URL + '/api/regions', { headers: loginStore.headers })
       .then((response) => {
         console.log(response.data)
-        regionPlace.value = response.data.data.filter(
-          (item, index, array) => array.indexOf(item) === array.lastIndexOf(item),
-        )
+        regionPlace.value = [...new Set(response.data.data)]
         return response.data
       })
       .catch((error) => {
