@@ -17,6 +17,10 @@
     const selectedItems = defineModel()
     selectedItems.value = []
 
+    watch(()=>props.items,()=>{
+        items.value = props.items
+    })
+
     watch(()=>selectedItems.value.length, ()=>{
         console.log({...selectedItems.value})
         if(selectedItems.value.length > 0){

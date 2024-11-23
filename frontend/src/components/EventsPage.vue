@@ -2,7 +2,7 @@
   <div class="w-auto p-5 flex flex-col gap-4">
     <div class="flex flex-wrap gap-2 pl-20 pr-20">
       <SelectWithSearch text="Вид спорта"></SelectWithSearch>
-      <SelectWithSearch :items="['Физра','Бег трусцой','Абоба', 'Климсаныч']" v-model="model" text="Дисциплина"></SelectWithSearch>
+      <SelectWithSearch :items="events.map((event)=> event.title)" v-model="model" text="Дисциплина"></SelectWithSearch>
       <SelectWithSearch :items="['Физра','Бег трусцой','Абоба', 'Климсаныч']" v-model="model2" text="Программа"></SelectWithSearch>
       <SelectWithSearch text="Место проведения"></SelectWithSearch>
       <SelectWithSearch text="Пол, возрастная группа"></SelectWithSearch>
@@ -23,7 +23,7 @@
       <ModalSubscribe v-model="modalSubscribeVisible"/>
     </div>
     
-    <CalendarPage></CalendarPage>
+    <CalendarPage v-model="events"></CalendarPage>
   </div>
 </template>
 
@@ -32,10 +32,12 @@
   import SelectWithSearch from './common/SelectWithSearch.vue';
   import ModalSubscribe from './common/ModalSubscribe.vue';
   import VueDatePicker from '@vuepic/vue-datepicker';
+  import { useEventStore } from '@/stores/eventStore';
   import { Bell } from 'lucide-vue-next';
   import { ref } from 'vue';
   import ParticipantsPicker from './common/ParticipantsPicker.vue';
   
+  const eventStore = useEventStore()
   const model = ref([])
   const model2 = ref([])
   const dateRange = ref([])
@@ -44,6 +46,12 @@
   const amountEnd = ref(10000)
 
   const dp = ref();
+  const events = ref([])
+  async function loadEvents(){
+    events.value = await eventStore.getEvents()
+  }
+
+  loadEvents()
 
   const selectDate = () => {
     dp.value.selectDate();

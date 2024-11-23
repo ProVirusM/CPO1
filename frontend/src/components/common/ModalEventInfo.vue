@@ -98,7 +98,9 @@
                         <div class="text-xl font-medium">
                             {{ props.participantsAmount }}
                         </div>
-                        <AuthButton title="Добавить в личный календарь"></AuthButton>
+                        <div class="flex items-center justify-center">
+                            <AuthButton title="Добавить в личный календарь"></AuthButton>
+                        </div>
                     </div>
                 </div>
             </div>
