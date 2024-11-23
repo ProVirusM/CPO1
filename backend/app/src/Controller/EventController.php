@@ -23,42 +23,46 @@ class EventController extends AbstractController
         }
 
         // Извлекаем параметры фильтров или задаем значения по умолчанию
-        $startDate = isset($data['start_date']) ? new \DateTimeImmutable($data['start_date']) : new \DateTimeImmutable('-30 days');
-        $endDate = isset($data['end_date']) ? new \DateTimeImmutable($data['end_date']) : new \DateTimeImmutable('now');
-        $sportId = isset($data['sport']) ? $data['sport'] : null; // null будет означать "без фильтра по спорту"
-        $countryId = isset($data['country']) ? $data['country'] : null; // если не передан, фильтровать по всем странам
-        $divisionId = isset($data['division']) ? $data['division'] : null; // если не передан, фильтровать по всем дивизионам
-        $tags = isset($data['tags']) ? $data['tags'] : []; // если не передан, фильтровать по всем тегам
-
-        // Применяем фильтры (если параметр не передан, не добавляем фильтр по нему)
         $filters = [];
-        if ($sportId) {
-            $filters['sport'] = $sportId;
+
+        // Фильтр по датам (если заданы start_date и end_date)
+        if (isset($data['start_date']) && isset($data['end_date'])) {
+            $startDate = new \DateTimeImmutable($data['start_date']);
+            $endDate = new \DateTimeImmutable($data['end_date']);
+            $filters['date'] = ['start' => $startDate, 'end' => $endDate];
         }
-        if ($countryId) {
-            $filters['country'] = $countryId;
+
+        // Добавляем фильтры по другим параметрам
+        if (isset($data['sport'])) {
+            $filters['sport'] = $data['sport'];
         }
-        if ($divisionId) {
-            $filters['division'] = $divisionId;
+        if (isset($data['country'])) {
+            $filters['country'] = $data['country'];
         }
-        if ($tags) {
-            $filters['tags'] = $tags;
+        if (isset($data['division'])) {
+            $filters['division'] = $data['division'];
+        }
+        if (isset($data['tags'])) {
+            $filters['tags'] = $data['tags'];
         }
 
         // Получаем события с применением фильтров
-        $events = $eventRepository->findByDateRange($startDate, $endDate, $filters);
+        $events = $eventRepository->findByFilters($filters);
 
         // Преобразуем полученные события в массив данных для ответа
         $result = [];
         foreach ($events as $event) {
             $result[] = [
                 'id' => $event->getId(),
-                'name' => $event->getName(),
-                'start_date' => $event->getStartDate()->format('Y-m-d H:i:s'),
-                'end_date' => $event->getEndDate()->format('Y-m-d H:i:s'),
-                'sport' => $event->getSport() ? $event->getSport()->getTitle() : null,
-                'country' => $event->getCountry() ? $event->getCountry()->getName() : null,
-                'division' => $event->getDivision() ? $event->getDivision()->getName() : null,
+                'title' => $event->getTitle(),
+                'from_date' => $event->getFromDate()->format('Y-m-d H:i:s'),
+                'to_date' => $event->getToDate()->format('Y-m-d H:i:s'),
+                'sport' => $event->getSport() ? $event->getSport()->getTitle() : null, // Выводим title спорта
+                'country' => $event->getCountry() ? $event->getCountry()->getName() : null, // Выводим name страны
+                'division' => $event->getDivision() ? $event->getDivision()->getTitle() : null,
+// Выводим name дивизиона
+                'region' => $event->getRegion() ? $event->getRegion()->getName() : null, // Выводим name региона
+                'place' => $event->getPlace() ? $event->getPlace()->getName() : null, // Выводим name места
                 'tags' => array_map(fn($tag) => $tag->getValue(), $event->getTags()->toArray())
             ];
         }

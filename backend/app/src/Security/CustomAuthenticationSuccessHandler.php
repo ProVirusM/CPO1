@@ -32,6 +32,7 @@ class CustomAuthenticationSuccessHandler extends AuthenticationSuccessHandler
             'token' => $jwt,
             'name' => $user->getName(),
             'email' => $user->getEmail(),
+            'id' => $user->getId(),
         ];
 
         // Возвращаем кастомный JSON ответ
