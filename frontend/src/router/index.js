@@ -5,20 +5,20 @@ import MainLayout from '@/layouts/MainLayout.vue' // Макет с навига�
 import MainPage from '@/components/MainPage.vue'
 import EventsPage from '@/components/EventsPage.vue'
 import ProfilePage from '@/components/ProfilePage.vue'
-import HomeView from '@/views/HomeView.vue' // Домашняя страница
+// import HomeView from '@/views/HomeView.vue' // Домашняя страница
 import AuthView from '@/views/AuthView.vue' // Авторизация
 import RegisterView from '@/views/RegisterView.vue' // Регистрация
 import ErrorPage from '@/views/ErrorPage.vue' // Страница ошибки
 
 // Создаем маршруты
 const routes = [
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: HomeView, // Домашняя страница
+  // },
   {
     path: '/',
-    name: 'home',
-    component: HomeView, // Домашняя страница
-  },
-  {
-    path: '/auth',
     name: 'auth',
     component: AuthView, // Авторизация
   },

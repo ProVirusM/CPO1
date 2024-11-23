@@ -18,7 +18,7 @@
         </form>
 
         <p
-          @click="router.push('/auth')"
+          @click="router.push('/')"
           class="mt-10 text-center ml-[50px] sm:mr-[2px] cursor-pointer font-golos font-medium text-[21px] text-[#191919]"
         >
           Войти
