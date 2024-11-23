@@ -4,6 +4,7 @@ import { watch } from 'vue'
 import { CircleX, ChevronDown, Search } from 'lucide-vue-next'
 import { onClickOutside } from '@vueuse/core'
 import CheckBox from './CheckBox.vue'
+import { defineEmits } from 'vue'
 
 import InputField from './InputField.vue'
 
@@ -76,10 +77,16 @@ function filterBySearch(searchValue) {
     return filtered.toLowerCase().includes(searchValue.toLowerCase())
   })
 }
+
+const emit = defineEmits(['open'])
+
+const emitOpen = () => {
+  emit('open')
+}
 </script>
 
 <template>
-  <div ref="window" class="relative w-fit">
+  <div @click="emitOpen" ref="window" class="relative w-fit">
     <div
       @click="dropDownVisible = !dropDownVisible"
       class="cursor-pointer relative rounded-xl w-fit pl-2 pr-2 pt-1 pb-1 flex flex-row items-center justify-center gap-[10px] border-solid border-[1px] outline-solid"

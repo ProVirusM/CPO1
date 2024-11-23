@@ -5,21 +5,33 @@
         :items="filterStore.sport"
         v-model="model3"
         text="Вид спорта"
+        @open="loadSports"
       ></SelectWithSearch>
       <SelectWithSearch
-        :items="['Физра', 'Бег трусцой', 'Абоба', 'Климсаныч']"
+        :items="filterStore.division"
         v-model="model"
-        text="Дисциплина"
+        text="Дивизион"
+        @open="loadDivisions"
       ></SelectWithSearch>
       <SelectWithSearch
-        :items="['Физра', 'Бег трусцой', 'Абоба', 'Климсаныч']"
+        :items="filterStore.placeCity"
         v-model="model2"
-        text="Программа"
+        text="Место проведения"
+        @open="loadPlaceCity"
       ></SelectWithSearch>
-      <SelectWithSearch text="Место проведения"></SelectWithSearch>
-      <SelectWithSearch text="Пол, возрастная группа"></SelectWithSearch>
-      <SelectWithSearch text="Сроки проведения"></SelectWithSearch>
-      <SelectWithSearch text="Тип"></SelectWithSearch>
+      <!-- <SelectWithSearch text="Пол, возрастная группа"></SelectWithSearch> -->
+      <SelectWithSearch
+        :items="filterStore.regionPlace"
+        v-model="model5"
+        text="Регион проведения"
+        @open="loadRegionPlace"
+      ></SelectWithSearch>
+      <SelectWithSearch
+        :items="filterStore.tag"
+        v-model="model4"
+        text="Тип"
+        @open="loadTags"
+      ></SelectWithSearch>
       <ParticipantsPicker
         v-model:start="amountStart"
         v-model:end="amountEnd"
@@ -66,11 +78,12 @@ import { ref } from 'vue'
 import ParticipantsPicker from './common/ParticipantsPicker.vue'
 import { useFilterStore } from '@/stores/filterStore'
 import { useLoginStore } from '@/stores/loginStore'
-import { onMounted } from 'vue'
 
 const model = ref([])
 const model2 = ref([])
 const model3 = ref([])
+const model4 = ref([])
+const model5 = ref([])
 const dateRange = ref([])
 const modalSubscribeVisible = ref(false)
 const amountStart = ref(0)
@@ -78,16 +91,40 @@ const amountEnd = ref(10000)
 
 const filterStore = useFilterStore()
 
-onMounted(async () => {
-  await filterStore.getSports()
-  console.log(filterStore.sport.slice(0, 5))
-})
+// Функции для загрузки данных
+const loadSports = async () => {
+  if (!filterStore.sport.length) {
+    await filterStore.getSports()
+  }
+}
 
+const loadDivisions = async () => {
+  if (!filterStore.division.length) {
+    await filterStore.getDivisions()
+  }
+}
+
+const loadPlaceCity = async () => {
+  if (!filterStore.placeCity.length) {
+    await filterStore.getPlaceCity()
+  }
+}
+
+const loadTags = async () => {
+  if (!filterStore.tag.length) {
+    await filterStore.getTag()
+  }
+}
+
+const loadRegionPlace = async () => {
+  if (!filterStore.regionPlace.length) {
+    await filterStore.getRegionPlace()
+  }
+}
+
+// Выбор интервала дат
 const dp = ref()
-
 const selectDate = () => {
   dp.value.selectDate()
 }
 </script>
-
-<style lang="scss" scoped></style>
