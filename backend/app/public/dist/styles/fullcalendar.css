@@ -11,11 +11,11 @@
     --fc-button-hover-border-color: transparent;
     
     /* --fc-small-font-size: 1.313; */
-    --fc-border-color: black;
+    --fc-border-color: #D9D9D9;
     --fc-button-text-color: #black;
     --fc-daygrid-event-dot-width: 5px;
     --fc-button-bg-color: #F7F7F7;
-    --fc-border-color: rgb(163, 163, 163);
+    --fc-border-color: #D9D9D9;
 
     --fc-event-bg-color: #00C257;
     --fc-event-border-color: #00C257;
@@ -29,6 +29,8 @@
     padding-top: 8px;
     padding-bottom: 8px;
     font-size: 0.7em;
+    border-color: #D9D9D9;
+    transition: 0.2s;
 }
 .fc-theme-standard{
     border:none;
